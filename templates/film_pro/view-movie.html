@@ -1,0 +1,491 @@
+{% extends 'layout.html' %}
+{% block title %}
+View Movie
+{% endblock %}
+{% load static %}
+<!-- custom css -->
+{% block css %}
+{% endblock %}
+<!-- custom css end-->
+{% block content %}
+<div class="hero hero3">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<!-- <h1> movie listing - list</h1>
+				<ul class="breadcumb">
+					<li class="active"><a href="#">Home</a></li>
+					<li> <span class="ion-ios-arrow-right"></span> movie listing</li>
+				</ul> -->
+			</div>
+		</div>
+	</div>
+</div>
+<div class="page-single movie-single movie_single">
+	<div class="container">
+		<div class="row ipad-width2">
+			<div class="col-md-4 col-sm-12 col-xs-12">
+				<div class="movie-img sticky-sb">
+					<img src="{{ userdata.photo }}" alt="">
+					<div class="movie-btn">
+
+						<div class="btn-transform transform-vertical red">
+							<div><a href="{{ userdata.trailer_link }}" class="item item-1 redbtn"> <i class="ion-play"></i> Watch Trailer</a></div>
+							<div><a href="{{ userdata.trailer_link }}" class="item item-2 redbtn fancybox-media hvr-grow"><i class="ion-play"></i></a></div>
+						</div>
+
+						<div class="btn-transform transform-vertical">
+							<form action="{% url 'film_pro:edit_movie_avatar' id=userdata.unique_id %}" class="user" id="avatar_form" method="post" enctype="multipart/form-data" >
+							{% csrf_token %}
+							<div class="form-style-1 user-pro" action="#" style="margin-bottom: 0px; padding: 15px !important;">
+							<div class="row">
+							<div class="col-md-12 form-it">
+							<input type="file" name="change_avatar" value="" style="width: -webkit-fill-available; height: auto; color: red;" />
+							</div>
+							</div>
+							<div class="row">
+							<div class="col-md-12">
+							<input class="submit" type="submit" value="Change Picture">
+							</div>
+							</div>
+							</div>
+						 </form>
+						</div>
+
+					</div>
+				</div>
+			</div>
+			<div class="col-md-8 col-sm-12 col-xs-12">
+				<div class="movie-single-ct main-content">
+					<h1 class="bd-hd">{{ userdata.title }} <span>{{ userdata.release_date|date:'Y' }}</span></h1>
+					<div class="social-btn">
+						<div class="hover-bnt">
+							<a href="#" class="parent-btn"><i class="ion-android-share-alt"></i>share</a>
+							<div class="hvr-item">
+								<a href="https://www.facebook.com/" class="hvr-grow"><i class="ion-social-facebook"></i></a>
+								<a href="https://twitter.com/" class="hvr-grow"><i class="ion-social-twitter"></i></a>
+								<a href="https://www.youtube.com/" class="hvr-grow"><i class="ion-social-youtube"></i></a>
+							</div>
+						</div>
+					</div>
+					<div class="movie-rate">
+
+
+						<div class="rate">
+							<i class="ion-android-star"></i>
+              {% for row in userdata_rating %}
+							<p><span>{{ row.rating_value }}</span> /10<br>
+								<span class="rv">{{ row.rating_count }} Reviews</span>
+              {% empty %}
+							<p><span>0</span> /10<br>
+								<span class="rv">0 Reviews</span>
+							{% endfor %}
+							</p>
+						</div>
+
+<!--
+						<div class="rate-star">
+							<p>Rate This Movie:  </p>
+							<i class="ion-ios-star"></i>
+							<i class="ion-ios-star-outline"></i>
+						</div>
+-->
+					</div>
+					<div class="movie-tabs">
+						<div class="tabs">
+							<ul class="tab-links tabs-mv">
+								<li class="active"><a href="#overview">Overview</a></li>
+								<li><a href="#reviews"> Reviews</a></li>
+								<li><a href="#cast">  Cast & Crew </a></li>
+								<li><a href="#media"> Media</a></li>
+							</ul>
+						    <div class="tab-content">
+						        <div id="overview" class="tab active">
+						            <div class="row">
+						            	<div class="col-md-8 col-sm-12 col-xs-12">
+						            		<p>{{ userdata.overview }}</p>
+						            		<div class="title-hd-sm">
+												<h4>Photos</h4>
+												<a href="#" class="time">All {{ userdata_photos|length }} Photos <i class="ion-ios-arrow-right"></i></a>
+											</div>
+											<div class="mvsingle-item ov-item">
+
+												<div class="row">
+												<div class="col-md-12">
+													{% for row1 in userdata_photos %}
+														<a class="img-lightbox"  data-fancybox-group="gallery" href="{{ row1.photos }}" ><img src="{{ row1.photos }}" alt="" style="height: 100px; width: 100px;" ></a>
+														{% empty %}
+														<span class="error">No photos added yet</span>
+														{% endfor %}
+												</div>
+												</div>
+
+												<div class="row">
+	                      <div class="col-md-12">
+													<form action="{% url 'film_pro:add_movie_photo' id=userdata.unique_id %}" class="user" id="photos_form" method="post" enctype="multipart/form-data" >
+													{% csrf_token %}
+													<div class="form-style-1 user-pro" action="#" style="margin-bottom: 0px; padding: 15px !important;">
+													<div class="row">
+													<div class="col-md-12 form-it">
+													<input type="file" name="add_photo" value="" style="width: -webkit-fill-available; height: auto; color: red;" />
+													</div>
+													</div>
+													<div class="row">
+													<div class="col-md-12">
+													<input class="submit" type="submit" value="Add Photos">
+													</div>
+													</div>
+													</div>
+												 </form>
+											 </div>
+											 </div>
+
+											</div>
+											<div class="title-hd-sm">
+												<h4>cast</h4>
+												<a href="#" class="time">Full Cast & Crew  <i class="ion-ios-arrow-right"></i></a>
+											</div>
+											<!-- movie cast -->
+											<div class="mvcast-item">
+												{% for row_cast in userdata_cast %}
+												<div class="cast-it">
+													<div class="cast-left">
+													<img src="{{ row_cast.people.photo }}" alt="" style="width: 50px; height: 50px;" >
+														<a href="#">{{ row_cast.people }}</a>
+													</div>
+													<p>...  {{ row_cast.title }}</p>
+												</div>
+												{% empty %}
+												 <span class="error">No cast added yet</span>
+                        {% endfor %}
+											</div>
+
+											<div class="title-hd-sm">
+												<h4>User reviews</h4>
+												<a href="#" class="time">See All {{ userdata_reviews|length }} Reviews <i class="ion-ios-arrow-right"></i></a>
+											</div>
+											<!-- movie user review -->
+											{% for row_review in userdata_reviews %}
+											<div class="mv-user-review-item">
+												<h3>{{ row_review.review_title }}</h3>
+												<div class="no-star">
+												  {% for i in "x"|rjust:row_review.rating_scale|make_list %}
+													<i class="ion-android-star"></i>
+                          {% endfor %}
+												</div>
+												<p class="time">
+													{{ row_review.date_added }} by <a href="#"> {{ row_review.user.firstname }} {{ row_review.user.lastname }} </a>
+												</p>
+												<p>{{ row_review.review }}</p>
+											</div>
+                      {% empty %}
+											<span class="error">No reviews added yet</span>
+											{% endfor %}
+
+						            	</div>
+						            	<div class="col-md-4 col-xs-12 col-sm-12">
+						            		<div class="sb-it">
+						            			<h6>Director: </h6>
+						            			<p>
+																{% for row_dir in director %}
+																 <a href="{% url 'film_user:view_people' id=row_dir.unique_id %}">{{ row_dir.firstname }} {{ row_dir.lastname }}</a>,
+																{% endfor %}
+															</p>
+						            		</div>
+						            		<div class="sb-it">
+						            			<h6>Writer: </h6>
+						            			<p>
+																{% for row_writer in writer %}
+																 <a href="{% url 'film_user:view_people' id=row_writer.unique_id %}">{{ row_writer.firstname }} {{ row_writer.lastname }}</a>,
+																{% endfor %}
+															</p>
+						            		</div>
+						            		<div class="sb-it">
+						            			<h6>Stars: </h6>
+						            			<p>
+																{% for row_cast in userdata_cast %}
+																<a href="{% url 'film_pro:view_people' id=row_cast.unique_id %}">{{ row_cast.people }},</a>
+																{% empty %}
+																<span class="error">No cast added yet</span>
+																{% endfor %}
+															</p>
+						            		</div>
+						            		<div class="sb-it">
+						            			<h6>Genres:</h6>
+						            			<p><a href="#">{{ userdata.genere }}, </a></p>
+						            		</div>
+						            		<div class="sb-it">
+						            			<h6>Release Date:</h6>
+						            			<p>{{ userdata.release_date }} (U.S.A)</p>
+						            		</div>
+						            		<div class="sb-it">
+						            			<h6>Run Time:</h6>
+						            			<p>{{ userdata.running_time }} min</p>
+						            		</div>
+						            		<div class="sb-it">
+						            			<h6>MMPA Rating:</h6>
+						            			<p>{{ userdata.certificate }}</p>
+						            		</div>
+														<div class="sb-it">
+														<a href="{% url 'film_pro:edit_movie' id=userdata.unique_id %}" role="button" class="redbtn" style="padding: 7px 25px" >Edit</a> <br /><br />
+														<a href="{% url 'film_pro:edit_movie_cast' id=userdata.unique_id %}" role="button" class="redbtn" style="padding: 7px 25px" >Add Cast</a> <br /><br />
+														<a href="{% url 'film_pro:edit_movie_crew' id=userdata.unique_id %}" role="button" class="redbtn" style="padding: 7px 25px" >Add Crew</a> <br /><br />
+														<a href="{% url 'film_pro:delete_movie' id=userdata.unique_id %}" role="button" class="redbtn" style="padding: 7px 25px" >Delete</a>
+														</div>
+						            		<div class="ads">
+												<img src="images/uploads/ads1.png" alt="">
+											</div>
+						            	</div>
+						            </div>
+						        </div>
+						        <div id="reviews" class="tab review">
+						           <div class="row">
+						            	<div class="rv-hd">
+						            		<div class="div">
+							            		<h3>Related Movies To</h3>
+						       	 				<h2>{{ userdata.title }}</h2>
+							            	</div>
+
+						            	</div>
+						            	<div class="topbar-filter">
+											<p>Found <span>{{ userdata_reviews|length }} reviews</span> in total</p>
+										</div>
+
+										{% for row_review in userdata_reviews %}
+										<div class="mv-user-review-item">
+											<div class="user-infor">
+												<img src="{{ row_review.user.profile_photo }}" alt="">
+												<div>
+													<h3>{{ row_review.review_title }}</h3>
+													<div class="no-star">
+                          {% for i in "x"|rjust:row_review.rating_scale|make_list %}
+                          <i class="ion-android-star"></i>
+                          {% endfor %}
+										<!-- <i class="ion-android-star last"></i> -->
+													</div>
+													<p class="time">
+														{{ row_review.date_added }} by <a href="#"> {{ row_review.user.firstname }} {{ row_review.user.lastname }}</a>
+													</p>
+												</div>
+											</div>
+											<p>{{ row_review.review }}</p>
+										</div>
+                    {% empty %}
+										<span class="error">No reviews added yet</span>
+										{% endfor %}
+
+										<div class="topbar-filter">
+											<label>Reviews per page:</label>
+											<select>
+												<option value="range">5 Reviews</option>
+												<option value="saab">10 Reviews</option>
+											</select>
+											<div class="pagination2">
+												<span>Page 1 of 6:</span>
+												<a class="active" href="#">1</a>
+												<a href="#">2</a>
+												<a href="#">3</a>
+												<a href="#">4</a>
+												<a href="#">5</a>
+												<a href="#">6</a>
+												<a href="#"><i class="ion-arrow-right-b"></i></a>
+											</div>
+										</div>
+						            </div>
+						        </div>
+						        <div id="cast" class="tab">
+						        	<div class="row">
+						            	<h3>Cast & Crew of</h3>
+					       	 			<h2>{{ userdata.title }}</h2>
+
+										<div class="title-hd-sm">
+											<h4>Crew</h4>
+										</div>
+										<div class="mvcast-item">
+{% for row_cast in userdata_crew %}
+<div class="cast-it">
+	<div class="cast-left">
+		<img src="{{ row_cast.people.photo }}" alt="" style="width: 50px; height: 50px;" >
+		<a href="{% url 'film_pro:view_people' id=row_cast.unique_id %}">{{ row_cast.people.firstname }} {{ row_cast.people.lastname }}</a>
+	</div>
+	<p>...  {{ row_cast.people.position }}</p>
+</div>
+{% empty %}
+<span class="error">No crew added yet</span>
+{% endfor %}
+
+										</div>
+										<!-- //== -->
+										<div class="title-hd-sm">
+											<h4>Cast</h4>
+										</div>
+										<div class="mvcast-item">
+{% for row_cast in userdata_cast %}
+<div class="cast-it">
+	<div class="cast-left">
+		<img src="{{ row_cast.people.photo }}" alt="" style="width: 50px; height: 50px;" >
+		<a href="{% url 'film_pro:view_people' id=row_cast.unique_id %}">{{ row_cast.people }}</a>
+	</div>
+	<p>...  {{ row_cast.title }}</p>
+</div>
+{% empty %}
+<span class="error">No cast added yet</span>
+{% endfor %}
+										</div>
+										<!-- //== -->
+
+						            </div>
+					       	 	</div>
+					       	 	<div id="media" class="tab">
+						        	<div class="row">
+						        		<div class="rv-hd">
+						            		<div>
+						            			<h3>Videos & Photos of</h3>
+					       	 					<h2>{{ userdata.title }}</h2>
+						            		</div>
+						            	</div>
+
+<!--
+						            	<div class="title-hd-sm">
+											<h4>Videos <span>(8)</span></h4>
+										</div>
+
+
+										<div class="mvsingle-item media-item">
+											<div class="vd-item">
+												<div class="vd-it">
+													<img class="vd-img" src="images/uploads/vd-item1.jpg" alt="">
+													<a class="fancybox-media hvr-grow"  href="https://www.youtube.com/embed/o-0hcF97wy0"><img src="images/uploads/play-vd.png" alt=""></a>
+												</div>
+												<div class="vd-infor">
+													<h6> <a href="#">Trailer:  Watch New Scenes</a></h6>
+													<p class="time"> 1: 31</p>
+												</div>
+											</div>
+											<div class="vd-item">
+												<div class="vd-it">
+													<img class="vd-img" src="images/uploads/vd-item2.jpg" alt="">
+													<a class="fancybox-media hvr-grow" href="https://www.youtube.com/embed/o-0hcF97wy0"><img src="images/uploads/play-vd.png" alt=""></a>
+												</div>
+												<div class="vd-infor">
+													<h6> <a href="#">Featurette: “Avengers Re-Assembled</a></h6>
+													<p class="time"> 1: 03</p>
+												</div>
+											</div>
+											<div class="vd-item">
+												<div class="vd-it">
+													<img class="vd-img" src="images/uploads/vd-item3.jpg" alt="">
+													<a class="fancybox-media hvr-grow" href="https://www.youtube.com/embed/o-0hcF97wy0"><img src="images/uploads/play-vd.png" alt=""></a>
+												</div>
+												<div class="vd-infor">
+													<h6> <a href="#">Interview: Robert Downey Jr</a></h6>
+													<p class="time"> 3:27</p>
+												</div>
+											</div>
+											<div class="vd-item">
+												<div class="vd-it">
+													<img class="vd-img" src="images/uploads/vd-item4.jpg" alt="">
+													<a class="fancybox-media hvr-grow" href="https://www.youtube.com/embed/o-0hcF97wy0"><img src="images/uploads/play-vd.png" alt=""></a>
+												</div>
+												<div class="vd-infor">
+													<h6> <a href="#">Interview: Scarlett Johansson</a></h6>
+													<p class="time"> 3:27</p>
+												</div>
+											</div>
+											<div class="vd-item">
+												<div class="vd-it">
+													<img class="vd-img" src="images/uploads/vd-item1.jpg" alt="">
+													<a class="fancybox-media hvr-grow" href="https://www.youtube.com/embed/o-0hcF97wy0"><img src="images/uploads/play-vd.png" alt=""></a>
+												</div>
+												<div class="vd-infor">
+													<h6> <a href="#">Featurette: Meet Quicksilver & The Scarlet Witch</a></h6>
+													<p class="time"> 1: 31</p>
+												</div>
+											</div>
+											<div class="vd-item">
+												<div class="vd-it">
+													<img class="vd-img" src="images/uploads/vd-item2.jpg" alt="">
+													<a class="fancybox-media hvr-grow" href="https://www.youtube.com/embed/o-0hcF97wy0"><img src="images/uploads/play-vd.png" alt=""></a>
+												</div>
+												<div class="vd-infor">
+													<h6> <a href="#">Interview: Director Joss Whedon</a></h6>
+													<p class="time"> 1: 03</p>
+												</div>
+											</div>
+											<div class="vd-item">
+												<div class="vd-it">
+													<img class="vd-img" src="images/uploads/vd-item3.jpg" alt="">
+													<a class="fancybox-media hvr-grow" href="https://www.youtube.com/embed/o-0hcF97wy0"><img src="images/uploads/play-vd.png" alt=""></a>
+												</div>
+												<div class="vd-infor">
+													<h6> <a href="#">Interview: Mark Ruffalo</a></h6>
+													<p class="time"> 3:27</p>
+												</div>
+											</div>
+											<div class="vd-item">
+												<div class="vd-it">
+													<img class="vd-img" src="images/uploads/vd-item4.jpg" alt="">
+													<a class="fancybox-media hvr-grow" href="https://www.youtube.com/embed/o-0hcF97wy0"><img src="images/uploads/play-vd.png" alt=""></a>
+												</div>
+												<div class="vd-infor">
+													<h6> <a href="#">Official Trailer #2</a></h6>
+													<p class="time"> 3:27</p>
+												</div>
+											</div>
+										</div>
+-->
+										<div class="title-hd-sm">
+											<h4>Photos <span> ({{ userdata_photos|length }})</span></h4>
+										</div>
+										<div class="mvsingle-item">
+											<div class="row">
+											<div class="col-md-12">
+												{% for row1 in userdata_photos %}
+													<a class="img-lightbox"  data-fancybox-group="gallery" href="{{ row1.photos }}" ><img src="{{ row1.photos }}" alt="" style="height: 100px; width: 100px;" ></a>
+												{% empty %}
+												<span class="error">No photos added yet</span>
+												{% endfor %}
+											</div>
+											</div>
+										</div>
+						        	</div>
+					       	 	</div>
+						    </div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+<!-- custom js -->
+{% block js %}
+<script src="{% static 'validate/jquery.validate.min.js' %}"></script>
+<script src="{% static 'validate/additional-methods.min.js' %}"></script>
+<script>
+$(document).ready(function(){
+	$( "#avatar_form" ).validate({
+	 ignore: [],
+	  rules: {
+	    change_avatar: {
+	      required: true,
+				extension:'png,jpg,jpeg',
+	      filesize: 2097152,
+	    },
+	  }
+	});
+	$( "#photos_form" ).validate({
+	 ignore: [],
+	  rules: {
+	    add_photo: {
+	      required: true,
+				extension:'png,jpg,jpeg',
+	      filesize: 2097152,
+	    },
+	  }
+	});
+});
+</script>
+{% endblock %}
+<!-- custom js end-->

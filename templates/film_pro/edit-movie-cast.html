@@ -1,0 +1,92 @@
+{% extends 'layout.html' %}
+{% block title %}
+Edit Profile
+{% endblock %}
+{% load static %}
+<!-- custom css -->
+{% block css %}
+{% endblock %}
+<!-- custom css end-->
+{% block content %}
+<div class="hero user-hero">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="hero-ct">
+					<h1>Add Cast</h1>
+					<ul class="breadcumb">
+						<li class="active"><a href="#">Home</a></li>
+						<li> <span class="ion-ios-arrow-right"></span>Profile</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="page-single">
+	<div class="container">
+		<div class="row ipad-width">
+			<div class="col-md-10 col-sm-12 col-xs-12 col-md-offset-1">
+				<div class="form-style-1 user-pro" action="#">
+					<form action="" class="user" id="profile_form" method="post" enctype="multipart/form-data" >
+						{% csrf_token %}
+						{% if messages %}
+						<ul class="messages text-center">
+						{% for message in messages %}
+						 <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+						 {% endfor %}
+						 </ul>
+						 {% endif %}
+						<h4>01. Details</h4>
+						<div class="row">
+							<div class="col-md-6 form-it">
+								<label>Cast</label>
+								<select name="cast">
+								<option value="">Select</option>
+								{% for row in userdata %}
+								<option value="{{ row.unique_id }}">{{ row.firstname }} {{ row.lastname }} </option>
+								{% endfor %}
+								</select>
+							</div>
+							<div class="col-md-6 form-it">
+								<label>Title</label>
+								<input type="text" placeholder="Title" value="" name="title" >
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-2">
+								<input class="submit" type="submit" value="save">
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+<!-- custom js -->
+{% block js %}
+<script src="{% static 'validate/jquery.validate.min.js' %}"></script>
+<script src="{% static 'validate/additional-methods.min.js' %}"></script>
+<script>
+$(document).ready(function(){
+$( "#profile_form" ).validate({
+ ignore: [],
+  rules: {
+     title: {
+      required: true,
+      digits: false,
+      minlength: 2,
+      maxlength: 255
+    },
+		cast: {
+			required: true,
+		}
+  }
+});
+});
+</script>
+{% endblock %}
+<!-- custom js end-->

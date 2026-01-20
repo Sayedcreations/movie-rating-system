@@ -1,0 +1,173 @@
+{% extends 'layout.html' %}
+{% block title %}
+Edit Profile
+{% endblock %}
+{% load static %}
+<!-- custom css -->
+{% block css %}
+{% endblock %}
+<!-- custom css end-->
+{% block content %}
+<div class="hero user-hero">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="hero-ct">
+					<h1>Edit People</h1>
+					<ul class="breadcumb">
+						<li class="active"><a href="#">Home</a></li>
+						<li> <span class="ion-ios-arrow-right"></span>Profile</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="page-single">
+	<div class="container">
+		<div class="row ipad-width">
+			<div class="col-md-10 col-sm-12 col-xs-12 col-md-offset-1">
+				<div class="form-style-1 user-pro" action="#">
+					<form action="" class="user" id="profile_form" method="post" >
+						{% csrf_token %}
+						{% if messages %}
+						<ul class="messages text-center">
+						{% for message in messages %}
+						 <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+						 {% endfor %}
+						 </ul>
+						 {% endif %}
+						<h4>01. Details</h4>
+						<div class="row">
+							<div class="col-md-6 form-it">
+								<label>Title</label>
+								<input type="text" placeholder="Title" value="{{ userdata.title }}" name="title" >
+							</div>
+							<div class="col-md-6 form-it">
+								<label>Trailer Link</label>
+								<input type="url" placeholder="" value="{{ userdata.trailer_link }}" name="trailer_link">
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6 form-it">
+								<label>Release Date</label>
+								<input type="date" placeholder="" value="{{ userdata.release_date }}" name="release_date">
+							</div>
+
+							<div class="col-md-6 form-it">
+								<label>Running Time ( In Minutes)</label>
+								<input type="text" placeholder="" value="{{ userdata.running_time }}" name="running_time">
+							</div>
+						</div>
+
+	          <div class="row">
+						<div class="col-md-6 form-it">
+							<label>Country</label>
+							<select name="country">
+							<option value="">Select</option>
+							<option value="India" {% if userdata.country == 'India' %} selected {% endif %} >India</option>
+							<option value="United Kingdom" {% if userdata.country == 'United Kingdom' %} selected {% endif %} >United Kingdom</option>
+							<option value="Usa" {% if userdata.country == 'Usa' %} selected {% endif %} >Usa</option>
+							<option value="Australia" {% if userdata.country == 'Australia' %} selected {% endif %} >Australia</option>
+							<option value="Srilanka" {% if userdata.country == 'Srilanka' %} selected {% endif %} >Srilanka</option>
+							<option value="German" {% if userdata.country == 'German' %} selected {% endif %} >German</option>
+							<option value="France" {% if userdata.country == 'France' %} selected {% endif %} >France</option>
+							<option value="Brazil" {% if userdata.country == 'Brazil' %} selected {% endif %} >Brazil</option>
+							<option value="Russia" {% if userdata.country == 'Russia' %} selected {% endif %} >Russia</option>
+							</select>
+						</div>
+
+						<div class="col-md-6 form-it">
+							<label>Certificate</label>
+							<input type="text" placeholder="" value="{{ userdata.certificate }}" name="certificate">
+						</div>
+						</div>
+
+						<div class="row">
+						<div class="col-md-12 form-it">
+						<label>Overview</label>
+            <textarea name="overview">{{ userdata.overview }}</textarea>
+						</div>
+						</div>
+
+						<div class="row">
+						<div class="col-md-6 form-it">
+							<label>Genre</label>
+							<select name="genre" multiple style="height: 130px">
+							<option value="Action" {% if 'Action' in userdata.genere %} selected {% endif %} >Action</option>
+							<option value="Animation" {% if 'Animation' in userdata.genere %} selected {% endif %} >Animation</option>
+							<option value="Adventure" {% if 'Adventure' in userdata.genere %} selected {% endif %} >Adventure</option>
+							<option value="Comedy" {% if 'Comedy' in userdata.genere %} selected {% endif %} >Comedy</option>
+							<option value="Crime" {% if 'Crime' in userdata.genere %} selected {% endif %} >Crime</option>
+							<option value="Drama" {% if 'Drama' in userdata.genere %} selected {% endif %} >Drama</option>
+							<option value="Fantasy" {% if 'Fantasy' in userdata.genere %} selected {% endif %} >Fantasy</option>
+							<option value="Historical" {% if 'Historical' in userdata.genere %} selected {% endif %} >Historical</option>
+							<option value="Horror" {% if 'Horror' in userdata.genere %} selected {% endif %} >Horror</option>
+							<option value="Romance" {% if 'Romance' in userdata.genere %} selected {% endif %} >Romance</option>
+							<option value="Science_Fiction" {% if 'Science_Fiction' in userdata.genere %} selected {% endif %} >Science Fiction</option>
+							<option value="Thriller" {% if 'Thriller' in userdata.genere %} selected {% endif %} >Thriller</option>
+							<option value="Western" {% if 'Western' in userdata.genere %} selected {% endif %} >Western</option>
+							<option value="Other" {% if 'Other' in userdata.genere %} selected {% endif %} >Other</option>
+							</select>
+						</div>
+
+						</div>
+
+						<div class="row">
+							<div class="col-md-2">
+								<input class="submit" type="submit" value="save">
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+<!-- custom js -->
+{% block js %}
+<script src="{% static 'validate/jquery.validate.min.js' %}"></script>
+<script src="{% static 'validate/additional-methods.min.js' %}"></script>
+<script>
+$(document).ready(function(){
+$( "#profile_form" ).validate({
+ ignore: [],
+  rules: {
+		title: {
+		 required: true,
+		 digits: false,
+		 minlength: 2,
+		 maxlength: 255
+	 },
+	 release_date: {
+		 required: true,
+	 },
+	 running_time: {
+		 required: true,
+		 digits: true,
+	 },
+	 overview: {
+		 required: true,
+		 digits: false,
+		 minlength: 100,
+		 maxlength: 20000
+	 },
+	 trailer_link: {
+		 required: true,
+	 },
+	 certificate: {
+		 required: true,
+	 },
+	 country: {
+		required: true,
+	 },
+	 genre: {
+		 required: true,
+	 }
+  }
+});
+});
+</script>
+{% endblock %}
+<!-- custom js end-->

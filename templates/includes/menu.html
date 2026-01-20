@@ -1,0 +1,116 @@
+{% load static %}
+<nav class="navbar navbar-default navbar-custom">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header logo">
+        <div class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+          <span class="sr-only">Toggle navigation</span>
+          <div id="nav-icon1">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        </div>
+        <a href=""><img class="logo" src="{% static 'images/logo1.png' %}" alt="" width="119" height="58"></a>
+      </div>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse flex-parent" id="bs-example-navbar-collapse-1">
+
+      {% if 'is_logged_in' not in request.session or request.session.usertype == 'user' %}
+      <ul class="nav navbar-nav flex-child-menu menu-left">
+        <li class="hidden">
+          <a href="#page-top"></a>
+        </li>
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'film_user:list_movie' %}">Movies</a></li>
+        <li><a href="{% url 'film_user:list_people' %}">Celebrity</a></li>
+      </ul>
+      {% endif %}
+
+      {% if 'is_logged_in' in request.session %}
+      <ul class="nav navbar-nav flex-child-menu menu-left">
+        <li class="hidden">
+        <a href="#page-top"></a>
+        </li>
+        {% if request.session.usertype == 'user' %}
+        <li><a href="{% url 'film_user:dashboard' %}">Dashboard</a></li>
+        <li><a href="{% url 'film_user:edit_profile' %}">Edit Profile</a></li>
+        {% endif %}
+        {% if request.session.usertype == 'pro' %}
+        <li><a href="{% url 'film_pro:dashboard' %}">Dashboard</a></li>
+        <li><a href="{% url 'film_pro:edit_profile' %}">Edit Profile</a></li>
+        <li class="dropdown first">
+          <a class="btn btn-default dropdown-toggle lv1" data-toggle="dropdown" data-hover="dropdown">
+          People <i class="fa fa-angle-down" aria-hidden="true"></i>
+          </a>
+          <ul class="dropdown-menu level1">
+            <li><a href="{% url 'film_pro:list_people' %}">List People</a></li>
+            <li class="it-last"><a href="{% url 'film_pro:add_people' %}">Add People</a></li>
+          </ul>
+        </li>
+        <li class="dropdown first">
+          <a class="btn btn-default dropdown-toggle lv1" data-toggle="dropdown" data-hover="dropdown">
+          Movie <i class="fa fa-angle-down" aria-hidden="true"></i>
+          </a>
+          <ul class="dropdown-menu level1">
+            <li class="it-last"><a href="{% url 'film_pro:list_movie' %}">List Movie</a></li>
+            <li><a href="{% url 'film_pro:add_movie' %}">Add Movie</a></li>
+          </ul>
+        </li>
+        {% endif %}
+
+        {% if request.session.usertype == 'site_admin' %}
+        <li><a href="{% url 'site_admin:dashboard' %}">Dashboard</a></li>
+        <li class="dropdown first">
+          <a class="btn btn-default dropdown-toggle lv1" data-toggle="dropdown" data-hover="dropdown">
+          Celebrity <i class="fa fa-angle-down" aria-hidden="true"></i>
+          </a>
+          <ul class="dropdown-menu level1">
+            <li class="it-last"><a href="{% url 'site_admin:list_people' %}">List Celebrity</a></li>
+          </ul>
+        </li>
+        <li class="dropdown first">
+          <a class="btn btn-default dropdown-toggle lv1" data-toggle="dropdown" data-hover="dropdown">
+          Movie <i class="fa fa-angle-down" aria-hidden="true"></i>
+          </a>
+          <ul class="dropdown-menu level1">
+            <li class="it-last"><a href="{% url 'site_admin:list_movie' %}">List Movie</a></li>
+          </ul>
+        </li>
+        <li><a href="{% url 'site_admin:list_pro' %}">Pro</a></li>
+        <li><a href="{% url 'site_admin:list_user' %}">User</a></li>
+        <li><a href="{% url 'site_admin:list_screen' %}">Screens</a></li>        
+        {% endif %}
+
+      </ul>
+      {% endif %}
+      <ul class="nav navbar-nav flex-child-menu menu-right">
+        {% if 'is_logged_in' not in request.session %}
+        <li class="dropdown first">
+          <a class="btn btn-default dropdown-toggle lv1" data-toggle="dropdown" data-hover="dropdown">
+          Public Relations (pro) <i class="fa fa-angle-down" aria-hidden="true"></i>
+          </a>
+          <ul class="dropdown-menu level1">
+            <li><a href="{% url 'film_pro:login' %}">log in</a></li>
+            <li class="it-last"><a href="{% url 'film_pro:signup' %}">sign up</a></li>
+          </ul>
+        </li>
+        <li class="loginLink"><a class="link_active" href="{% url 'film_user:login' %}">Log In</a></li>
+        <li class="btn signupLink"><a href="{% url 'film_user:signup' %}">sign up</a></li>
+        {% endif %}
+
+        {% if 'is_logged_in' in request.session %}
+        {% if request.session.usertype == 'user' %}
+         <li class="btn signupLink"><a href="{% url 'film_user:logout' %}">Log out</a></li>
+        {% endif %}
+        {% if request.session.usertype == 'pro' %}
+         <li class="btn signupLink"><a href="{% url 'film_pro:logout' %}">Log out</a></li>
+        {% endif %}
+        {% if request.session.usertype == 'site_admin' %}
+         <li class="btn signupLink"><a href="{% url 'site_admin:logout' %}">Log out</a></li>
+        {% endif %}
+        {% endif %}
+
+      </ul>
+    </div>
+  <!-- /.navbar-collapse -->
+  </nav>

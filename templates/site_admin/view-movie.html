@@ -1,0 +1,427 @@
+{% extends 'layout.html' %}
+{% block title %}
+View Movie
+{% endblock %}
+{% load static %}
+<!-- custom css -->
+{% block css %}
+<style>
+	/****** Style Star Rating Widget *****/
+
+	.rating {
+	  border: none;
+	  float: left;
+	}
+
+	.rating > input { display: none; }
+	.rating > label:before {
+	  margin: 5px;
+	  font-size: 1.25em;
+	  font-family: FontAwesome;
+	  display: inline-block;
+	  content: "\f005";
+	}
+
+	.rating > .half:before {
+	  content: "\f089";
+	  position: absolute;
+	}
+
+	.rating > label {
+	  color: #ddd;
+	 float: right;
+	}
+
+	/***** CSS Magic to Highlight Stars on Hover *****/
+
+	.rating > input:checked ~ label, /* show gold star when clicked */
+	.rating:not(:checked) > label:hover, /* hover current star */
+	.rating:not(:checked) > label:hover ~ label { color: #FFD700;  } /* hover previous stars in list */
+
+	.rating > input:checked + label:hover, /* hover current star when changing rating */
+	.rating > input:checked ~ label:hover,
+	.rating > label:hover ~ input:checked ~ label, /* lighten current selection */
+	.rating > input:checked ~ label:hover ~ label { color: #FFED85;  }
+</style>
+{% endblock %}
+<!-- custom css end-->
+{% block content %}
+<div class="hero hero3">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<!-- <h1> movie listing - list</h1>
+				<ul class="breadcumb">
+					<li class="active"><a href="#">Home</a></li>
+					<li> <span class="ion-ios-arrow-right"></span> movie listing</li>
+				</ul> -->
+			</div>
+		</div>
+	</div>
+</div>
+<div class="page-single movie-single movie_single">
+	<div class="container">
+		<div class="row ipad-width2">
+			<div class="col-md-4 col-sm-12 col-xs-12">
+				<div class="movie-img sticky-sb">
+					<img src="{{ userdata.photo }}" alt="">
+					<div class="movie-btn">
+						<div class="btn-transform transform-vertical red">
+							<div><a href="{{ userdata.trailer_link }}" class="item item-1 redbtn"> <i class="ion-play"></i> Watch Trailer</a></div>
+							<div><a href="{{ userdata.trailer_link }}" class="item item-2 redbtn fancybox-media hvr-grow"><i class="ion-play"></i></a></div>
+						</div>
+						<div class="btn-transform transform-vertical">
+							<div><a href="https://paytm.com/movies" target="_blank" class="item item-1 yellowbtn"> <i class="ion-card"></i> Buy ticket</a></div>
+							<div><a href="https://paytm.com/movies" target="_blank" class="item item-2 yellowbtn"><i class="ion-card"></i></a></div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+			<div class="col-md-8 col-sm-12 col-xs-12">
+				<div class="movie-single-ct main-content">
+					<h1 class="bd-hd">{{ userdata.title }} <span>{{ userdata.release_date|date:'Y' }}</span></h1>
+					<div class="social-btn">
+
+						<a href="#" class="parent-btn" style="display: none" ><i class="ion-heart"></i> Add to Favorite</a>
+
+						<div class="hover-bnt">
+							<a href="#" class="parent-btn"><i class="ion-android-share-alt"></i>share</a>
+							<div class="hvr-item">
+								<a href="https://www.facebook.com/" class="hvr-grow"><i class="ion-social-facebook"></i></a>
+								<a href="https://twitter.com/" class="hvr-grow"><i class="ion-social-twitter"></i></a>
+								<a href="https://www.youtube.com/" class="hvr-grow"><i class="ion-social-youtube"></i></a>
+							</div>
+						</div>
+					</div>
+					{% if messages %}
+					<ul class="messages text-center">
+					{% for message in messages %}
+					 <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+					 {% endfor %}
+					 </ul>
+					 {% endif %}
+					<div class="movie-rate">
+
+						<div class="rate">
+							<i class="ion-android-star"></i>
+							{% for row in userdata_rating %}
+							<p><span>{{ row.rating_value }}</span> /10<br>
+								<span class="rv">{{ row.rating_count }} Reviews</span>
+							{% empty %}
+							<p><span>0</span> /10<br>
+								<span class="rv">0 Reviews</span>
+							{% endfor %}
+							</p>
+						</div>
+<!--
+						<div class="rate-star">
+							<p>Rating:  </p>
+							<i class="ion-ios-star"></i>
+							<i class="ion-ios-star-outline"></i>
+						</div>
+-->
+					</div>
+
+					<div class="movie-tabs">
+						<div class="tabs">
+							<ul class="tab-links tabs-mv">
+								<li class="active"><a href="#overview">Overview</a></li>
+								<li><a href="#reviews"> Reviews</a></li>
+								<li><a href="#cast">  Cast & Crew </a></li>
+								<li><a href="#media"> Media</a></li>
+							</ul>
+						    <div class="tab-content">
+						        <div id="overview" class="tab active">
+						            <div class="row">
+						            	<div class="col-md-8 col-sm-12 col-xs-12">
+						            		<p>{{ userdata.overview }}</p>
+						            		<div class="title-hd-sm">
+												<h4>Photos</h4>
+												<a href="#" class="time">All {{ userdata_photos|length }} Photos <i class="ion-ios-arrow-right"></i></a>
+											</div>
+											<div class="mvsingle-item ov-item">
+
+												<div class="row">
+												<div class="col-md-12">
+													{% for row1 in userdata_photos %}
+														<a class="img-lightbox"  data-fancybox-group="gallery" href="{{ row1.photos }}" ><img src="{{ row1.photos }}" alt="" style="height: 100px; width: 100px;" ></a>
+													{% empty %}
+													<span class="error">No photos added yet</span>
+													{% endfor %}
+												</div>
+												</div>
+
+											</div>
+											<div class="title-hd-sm">
+												<h4>cast</h4>
+												<a href="#" class="time">Full Cast & Crew  <i class="ion-ios-arrow-right"></i></a>
+											</div>
+											<!-- movie cast -->
+											<div class="mvcast-item">
+												{% for row_cast in userdata_cast %}
+												<div class="cast-it">
+													<div class="cast-left">
+													<img src="{{ row_cast.people.photo }}" alt="" style="width: 50px; height: 50px;" >
+														<a href="{% url 'site_admin:view_people' id=row_cast.unique_id %}">{{ row_cast.people }}</a>
+													</div>
+													<p>...  {{ row_cast.title }}</p>
+												</div>
+												{% empty %}
+												 <span class="error">No cast added yet</span>
+                        {% endfor %}
+											</div>
+
+											<div class="title-hd-sm">
+												<h4>User reviews</h4>
+												<a href="" class="time">See All {{ userdata_reviews|length }} Reviews <i class="ion-ios-arrow-right"></i></a>
+											</div>
+											<!-- movie user review -->
+											{% for row_review in userdata_reviews %}
+											<div class="mv-user-review-item">
+												<h3>{{ row_review.review_title }}</h3>
+												<div class="no-star">
+												  {% for i in "x"|rjust:row_review.rating_scale|make_list %}
+													<i class="ion-android-star"></i>
+                          {% endfor %}
+												</div>
+												<p class="time">
+													{{ row_review.date_added }} by <a href=""> {{ row_review.user.firstname }} {{ row_review.user.lastname }} </a>
+												</p>
+												<p>{{ row_review.review }}</p>
+											</div>
+                      {% empty %}
+											<span class="error">No reviews added yet</span>
+											{% endfor %}
+						            	</div>
+						            	<div class="col-md-4 col-xs-12 col-sm-12">
+						            		<div class="sb-it">
+						            			<h6>Director: </h6>
+						            			<p>
+															  {% for row_dir in director %}
+																 <a href="{% url 'site_admin:view_people' id=row_dir.unique_id %}">{{ row_dir.firstname }} {{ row_dir.lastname }}</a>,
+                                {% endfor %}
+															</p>
+						            		</div>
+						            		<div class="sb-it">
+						            			<h6>Writer: </h6>
+						            			<p>
+																{% for row_writer in writer %}
+																 <a href="{% url 'site_admin:view_people' id=row_writer.unique_id %}">{{ row_writer.firstname }} {{ row_writer.lastname }}</a>,
+																{% endfor %}
+															</p>
+						            		</div>
+						            		<div class="sb-it">
+						            			<h6>Stars: </h6>
+						            			<p>
+																{% for row_cast in userdata_cast %}
+																<a href="{% url 'site_admin:view_people' id=row_cast.unique_id %}">{{ row_cast.people }},</a>
+																{% empty %}
+																<span class="error">No cast added yet</span>
+																{% endfor %}
+															 </p>
+						            		</div>
+						            		<div class="sb-it">
+						            			<h6>Genres:</h6>
+						            			<p><a href="#">{{ userdata.genere }}, </a></p>
+						            		</div>
+						            		<div class="sb-it">
+						            			<h6>Release Date:</h6>
+						            			<p>{{ userdata.release_date }} (U.S.A)</p>
+						            		</div>
+						            		<div class="sb-it">
+						            			<h6>Run Time:</h6>
+						            			<p>{{ userdata.running_time }} min</p>
+						            		</div>
+						            		<div class="sb-it">
+						            			<h6>MMPA Rating:</h6>
+						            			<p>{{ userdata.certificate }}</p>
+						            		</div>
+						            		<div class="ads">
+												<img src="images/uploads/ads1.png" alt="">
+											</div>
+						            	</div>
+						            </div>
+						        </div>
+						        <div id="reviews" class="tab review">
+						           <div class="row">
+
+{% if request.session.is_logged_in and request.session.usertype == 'user' %}
+													<div class="row ipad-width">
+															<div class="col-md-10 col-sm-12 col-xs-12">
+															<div class="form-style-1 user-pro" action="">
+																<form action="" class="password"  id="myform" method="post" style="padding: 0px !important;">
+																	{% csrf_token %}
+																	<div class="row">
+																		<div class="col-md-12 form-it">
+																			<label>Title</label>
+																			<input type="text" placeholder="Title" name="title">
+																		</div>
+																	</div>
+
+                                   <div class="row">
+																	<div class="col-md-12 form-it">
+																		<label>Review</label>
+																		<textarea name="review"></textarea>
+																	</div>
+	                                </div>
+
+																	<div class="row">
+           <div class="col-md-12 form-it">
+					<label style="float:left">Rating</label>
+					<fieldset class="rating" style="width: 100%;">
+						<input type="radio" id="star10" name="rating" value="10" /><label class = "full" for="star10" title="Awesome - 5 stars"></label>
+						<input type="radio" id="star9" name="rating" value="9" /><label class = "full" for="star9" title="Pretty good - 4 stars"></label>
+						<input type="radio" id="star8" name="rating" value="8" /><label class = "full" for="star8" title="Meh - 3 stars"></label>
+						<input type="radio" id="star7" name="rating" value="7" /><label class = "full" for="star7" title="Kinda bad - 2 stars"></label>
+						<input type="radio" id="star6" name="rating" value="6" /><label class = "full" for="star6" title="Sucks big time - 1 star"></label>
+					  <input type="radio" id="star5" name="rating" value="5" /><label class = "full" for="star5" title="Awesome - 5 stars"></label>
+					  <input type="radio" id="star4" name="rating" value="4" /><label class = "full" for="star4" title="Pretty good - 4 stars"></label>
+					  <input type="radio" id="star3" name="rating" value="3" /><label class = "full" for="star3" title="Meh - 3 stars"></label>
+					  <input type="radio" id="star2" name="rating" value="2" /><label class = "full" for="star2" title="Kinda bad - 2 stars"></label>
+					  <input type="radio" id="star1" name="rating" value="1" /><label class = "full" for="star1" title="Sucks big time - 1 star"></label>
+					</fieldset>
+																 </div>
+																 </div>
+																	<div class="row">
+																		<div class="col-md-2">
+																			<input class="submit" type="submit" value="Submit">
+																		</div>
+																	</div>
+																</form>
+															</div>
+														</div>
+													</div>
+{% elif request.session.is_logged_in and request.session.usertype == 'pro' %}
+{% else %}
+{% endif %}
+						         <div class="topbar-filter">
+											<p>Found <span>{{ userdata_reviews|length }} reviews</span> in total</p>
+										</div>
+{% for row in userdata_reviews %}
+										<div class="mv-user-review-item">
+											<div class="user-infor">
+												<img src="{{ row.user.profile_photo }}" alt="">
+												<div>
+													<h3>{{ row.review_title }}</h3>
+													<div class="no-star">
+                          {% for i in "x"|rjust:row.rating_scale|make_list %}
+                          <i class="ion-android-star"></i>
+                          {% endfor %}
+										<!-- <i class="ion-android-star last"></i> -->
+													</div>
+													<p class="time">
+														{{ row.date_added }} by <a href="#"> {{ row.user.firstname }} {{ row.user.lastname }}</a>
+													</p>
+												</div>
+											</div>
+											<p>{{ row.review }}</p>
+										</div>
+{% endfor %}
+							
+						            </div>
+						        </div>
+						        <div id="cast" class="tab">
+						        	<div class="row">
+						            	<h3>Cast & Crew of</h3>
+					       	 			<h2>{{ userdata.title }}</h2>
+
+										<div class="title-hd-sm">
+											<h4>Crew</h4>
+										</div>
+										<div class="mvcast-item">
+{% for row_cast in userdata_crew %}
+											<div class="cast-it">
+												<div class="cast-left">
+													<img src="{{ row_cast.people.photo }}" alt="" style="width: 50px; height: 50px;" >
+													<a href="{% url 'site_admin:view_people' id=row_cast.unique_id %}">{{ row_cast.people.firstname }} {{ row_cast.people.lastname }}</a>
+												</div>
+												<p>...  {{ row_cast.people.position }}</p>
+											</div>
+											{% empty %}
+											<span class="error">No crew added yet</span>
+{% endfor %}
+										</div>
+										<!-- //== -->
+										<div class="title-hd-sm">
+											<h4>Cast</h4>
+										</div>
+										<div class="mvcast-item">
+{% for row_cast in userdata_cast %}
+											<div class="cast-it">
+												<div class="cast-left">
+													<img src="{{ row_cast.people.photo }}" alt="" style="width: 50px; height: 50px;" >
+													<a href="{% url 'site_admin:view_people' id=row_cast.unique_id %}">{{ row_cast.people }}</a>
+												</div>
+												<p>...  {{ row_cast.title }}</p>
+											</div>
+											{% empty %}
+											<span class="error">No cast added yet</span>
+											{% endfor %}
+										</div>
+										<!-- //== -->
+
+						            </div>
+					       	 	</div>
+					       	 	<div id="media" class="tab">
+						        	<div class="row">
+						        		<div class="rv-hd">
+						            		<div>
+						            			<h3>Videos & Photos of</h3>
+					       	 					<h2>{{ userdata.title }}</h2>
+						            		</div>
+						            	</div>
+										<div class="title-hd-sm">
+											<h4>Photos <span> ({{ userdata_photos|length }})</span></h4>
+										</div>
+										<div class="mvsingle-item">
+											<div class="row">
+											<div class="col-md-12">
+												{% for row1 in userdata_photos %}
+													<a class="img-lightbox"  data-fancybox-group="gallery" href="{{ row1.photos }}" ><img src="{{ row1.photos }}" alt="" style="height: 100px; width: 100px;" ></a>
+													{% empty %}
+													<span class="error">No photos added yet</span>
+													{% endfor %}
+											</div>
+											</div>
+										</div>
+						        	</div>
+					       	 	</div>
+						    </div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+<!-- custom js -->
+{% block js %}
+<script src="{% static 'validate/jquery.validate.min.js' %}"></script>
+<script src="{% static 'validate/additional-methods.min.js' %}"></script>
+<script>
+$(document).ready(function(){
+
+	$( "#myform" ).validate({
+	 ignore: [],
+	  rules: {
+			title: {
+       required: true,
+       minlength: 2,
+       maxlength: 600
+     },
+		 review: {
+			 required: true,
+			 minlength: 2,
+			 maxlength: 20000
+		 },
+		 rating: {
+			 required: true,
+		 },
+	  }
+	});
+});
+</script>
+{% endblock %}
+<!-- custom js end-->

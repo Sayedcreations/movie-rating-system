@@ -1,0 +1,18 @@
+<header class="ht-header">
+	<div class="container">
+    {% include "includes/menu.html" %}
+	    <!-- top search form -->
+			<form action="{% if request.session.usertype == 'pro' %}{% url 'film_pro:search_movie' %}{% elif request.session.usertype == 'site_admin' %}{% url 'site_admin:search_movie' %}{% else %}{% url 'film_user:search_movie' %}{% endif %}" method="post" >
+				{% csrf_token %}
+	    <div class="top-search">
+	    	<select name="search_item">
+				<option value="movie">Movie</option>
+				<option value="people">Celebrity</option>
+			</select>
+			<input type="text" name="search_value" required placeholder="Search for a movie, celebrity that you are looking for" style="background: none !important;" >
+			<input type="submit" value="Search" style="background: none !important; color: #dd003f; font-weight: bold; border: #dd003f thin solid;" />
+	    </div>
+      </form>
+
+	</div>
+</header>

@@ -1,0 +1,427 @@
+{% extends 'layout.html' %}
+{% block title %}
+Edit Profile
+{% endblock %}
+{% load static %}
+<!-- custom css -->
+{% block css %}
+<script src="https://jsuites.net/v4/jsuites.js"></script>
+<link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
+<style>
+.donate-now label,
+.donate-now input {
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+	padding: 13px 25px;
+  cursor: pointer;
+	float: left;
+	margin-right: 25px;
+	background-color: #dcf836;
+	border-radius: 5px;
+	font-family: 'Dosis', sans-serif;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.donate-now input[type="radio"] {
+  display: none;
+}
+
+.donate-now label:hover {
+  background: #DDD;
+}
+
+.donate-now input[type="radio"]:checked + label {
+  background: #dd003f;
+}
+
+.movie-container {
+  margin: 20px 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column
+}
+
+.movie-container select {
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  padding: 5px 15px;
+  margin-bottom: 40px;
+  font-size: 14px;
+  border-radius: 5px;
+}
+
+.container-arrange {
+  perspective: 1000px;
+  margin: 40px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.seat {
+  background-color: #444451;
+  height: 12px;
+  width: 15px;
+  margin: 3px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.selected {
+  background-color: #0081cb;
+}
+
+.occupied {
+  background-color: #fff;
+}
+
+.seat:nth-of-type(2) {
+  margin-right: 18px;
+}
+
+.seat:nth-last-of-type(2) {
+  margin-left: 18px;
+}
+
+.seat:not(.occupied):hover {
+  cursor: pointer;
+  transform: scale(1.2);
+}
+
+.showcase .seat:not(.occupied):hover {
+  cursor: default;
+  transform: scale(1);
+}
+
+.showcase {
+  display: flex;
+  justify-content: space-between;
+  list-style-type: none;
+  background: rgba(0,0,0,0.1);
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: #777;
+}
+
+.showcase li {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 10px;
+}
+
+.showcase li small {
+  margin-left: 2px;
+}
+
+.row-arrange {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.screen {
+  background: #fff;
+  height: 70px;
+  width: 70%;
+  margin: 15px 0;
+  transform: rotateX(-45deg);
+  box-shadow: 0 3px 10px rgba(255,255,255,0.7);
+}
+
+p.text {
+  margin: 40px 0;
+}
+
+p.text span {
+  color: #0081cb;
+  font-weight: 600;
+  box-sizing: content-box;
+}
+
+.credits a {
+  color: #fff;
+}
+
+</style>
+{% endblock %}
+<!-- custom css end-->
+{% block content %}
+<div class="hero hero3">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<!-- <h1> movie listing - list</h1>
+				<ul class="breadcumb">
+					<li class="active"><a href="#">Home</a></li>
+					<li> <span class="ion-ios-arrow-right"></span> movie listing</li>
+				</ul> -->
+			</div>
+		</div>
+	</div>
+</div>
+<div class="page-single movie-single movie_single">
+	<div class="container">
+		<div class="row ipad-width2">
+			<div class="col-md-4 col-sm-12 col-xs-12">
+				<div class="movie-img sticky-sb">
+					<img src="{{ userdata.photo }}" alt="">
+
+					<div class="movie-btn">
+						<div class="btn-transform transform-vertical red">
+							<div><a href="{{ userdata.trailer_link }}" class="item item-1 redbtn"> <i class="ion-play"></i> Watch Trailer</a></div>
+							<div><a href="{{ userdata.trailer_link }}" class="item item-2 redbtn fancybox-media hvr-grow"><i class="ion-play"></i></a></div>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+			<div class="col-md-8 col-sm-12 col-xs-12">
+				<div class="movie-single-ct main-content">
+					<h1 class="bd-hd">{{ userdata.title }} <span>{{ userdata.release_date|date:'Y' }}</span></h1>
+
+					<div class="movie-tabs">
+						<div class="tabs">
+							<ul class="tab-links tabs-mv">
+								<li class="active"><a href="#overview">Book Tickets</a></li>
+							</ul>
+						    <div class="tab-content">
+						        <div id="overview" class="tab active">
+						            <div class="row">
+						            	<div class="col-md-12 col-sm-12 col-xs-12">
+						         <div class="title-hd-sm">
+												<h4>Select Date</h4>
+											</div>
+											<div class="mvsingle-item ov-item">
+												<div class="row">
+												<div class="col-md-12" id='calendar'>
+												</div>
+												</div>
+											</div>
+<div class="title-hd-sm">
+<h4>Select Show</h4>
+<div id="calendar-value" style="color: #dd003f"></div>
+</div>
+<!-- movie cast -->
+<div class="mvcast-item">
+<div class="row">
+<div class="col-lg-12 donate-now">
+
+		<input type="radio" id="a25" name="amount" checked="checked" />
+			<label for="a25" id="a25">13:00</label>
+
+		<input type="radio" id="a50" name="amount" />
+			<label for="a50" id="a50">16:00</label>
+
+		<input type="radio" id="a75" name="amount" />
+			<label for="a75" id="a75">17:00</label>
+
+		<input type="radio" id="a100" name="amount" />
+			<label for="a100" id="a100">21:00</label>
+
+
+</div>
+</div>
+</div>
+<div class="title-hd-sm">
+<h4>Select Seats</h4>
+</div>
+<!-- movie cast -->
+<div class="mvcast-item">
+<div class="row">
+<div class="col-lg-12">
+
+  <div class="movie-container">
+    <label>Pick a movie: </label>
+    <select id="movie">
+      <option value="250">Interstellar (Rs. 250)</option>
+      <option value="200">Kabir Singh (Rs. 200)</option>
+      <option value="150">Duniyadari (Rs. 150)</option>
+      <option value="100">Natsamrat (Rs. 100)</option>
+    </select>
+
+    <ul class="showcase">
+      <li>
+        <div class="seat"></div>
+        <small>N/A</small>
+      </li>
+      <li>
+        <div class="seat selected"></div>
+        <small>Selected</small>
+      </li>
+      <li>
+        <div class="seat occupied"></div>
+        <small>Occupied</small>
+      </li>
+    </ul>
+
+    <div class="container-arrange">
+      <div class="screen"></div>
+
+      <div class="row-arrange">
+          <div class="seat"></div>
+          <div class="seat"></div>
+          <div class="seat"></div>
+          <div class="seat"></div>
+          <div class="seat"></div>
+          <div class="seat"></div>
+          <div class="seat"></div>
+          <div class="seat"></div>
+        </div>
+        <div class="row-arrange">
+          <div class="seat"></div>
+          <div class="seat"></div>
+          <div class="seat"></div>
+          <div class="seat occupied"></div>
+          <div class="seat occupied"></div>
+          <div class="seat"></div>
+          <div class="seat"></div>
+          <div class="seat"></div>
+        </div>
+        <div class="row-arrange">
+          <div class="seat"></div>
+          <div class="seat"></div>
+          <div class="seat"></div>
+          <div class="seat"></div>
+          <div class="seat"></div>
+          <div class="seat"></div>
+          <div class="seat occupied"></div>
+          <div class="seat occupied"></div>
+        </div>
+        <div class="row-arrange">
+          <div class="seat"></div>
+          <div class="seat"></div>
+          <div class="seat"></div>
+          <div class="seat"></div>
+          <div class="seat"></div>
+          <div class="seat"></div>
+          <div class="seat"></div>
+          <div class="seat"></div>
+        </div>
+        <div class="row-arrange">
+          <div class="seat"></div>
+          <div class="seat"></div>
+          <div class="seat"></div>
+          <div class="seat occupied"></div>
+          <div class="seat occupied"></div>
+          <div class="seat"></div>
+          <div class="seat"></div>
+          <div class="seat"></div>
+        </div>
+        <div class="row-arrange">
+          <div class="seat"></div>
+          <div class="seat"></div>
+          <div class="seat"></div>
+          <div class="seat"></div>
+          <div class="seat occupied"></div>
+          <div class="seat occupied"></div>
+          <div class="seat occupied"></div>
+          <div class="seat"></div>
+        </div>
+
+      <p class="text">
+        You have selected <span id="count">0</span> seats for the total price of Rs. <span id="total">0</span>
+      </p>
+    </div>
+  </div>
+
+
+
+</div>
+</div>
+</div>
+						            	</div>
+						            </div>
+						        </div>
+						    </div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+<!-- custom js -->
+{% block js %}
+<script src="{% static 'validate/jquery.validate.min.js' %}"></script>
+<script src="{% static 'validate/additional-methods.min.js' %}"></script>
+<script>
+
+  const container = document.querySelector('.container-arrange');
+  const seats = document.querySelectorAll('.row-arrange .seat:not(.occupied)');
+  const count = document.getElementById('count');
+  const total = document.getElementById('total');
+  const movieSelect = document.getElementById('movie');
+
+  let ticketPrice = +movieSelect.value;
+
+  //Update total and count
+  function updateSelectedCount() {
+    const selectedSeats = document.querySelectorAll('.row-arrange .seat.selected');
+    const selectedSeatsCount = selectedSeats.length;
+    count.innerText = selectedSeatsCount;
+    total.innerText = selectedSeatsCount * ticketPrice;
+  }
+
+  //Movie Select Event
+  movieSelect.addEventListener('change', e => {
+    ticketPrice = +e.target.value;
+    updateSelectedCount();
+  });
+
+  //Seat click event
+  container.addEventListener('click', e => {
+    if (e.target.classList.contains('seat') &&
+       !e.target.classList.contains('occupied')) {
+      e.target.classList.toggle('selected');
+    }
+    updateSelectedCount();
+  });
+
+	/* Calendar */
+jSuites.calendar(document.getElementById('calendar'), {
+format: 'YYYY-MM-DD',
+tooltip: true,
+date: '2022-04-01',
+validRange: [ '2022-04-01', '2022-04-31' ],
+	    onupdate: function(a,b) {    
+	        document.getElementById('calendar-value').innerText = b;
+	    }
+	});
+
+$(document).ready(function(){
+
+	$( "#avatar_form" ).validate({
+	 ignore: [],
+	  rules: {
+	    change_avatar: {
+	      required: true,
+				extension:'png,jpg,jpeg',
+	      filesize: 2097152,
+	    },
+	  }
+	});
+	$( "#photos_form" ).validate({
+	 ignore: [],
+	  rules: {
+	    add_photo: {
+	      required: true,
+				extension:'png,jpg,jpeg',
+	      filesize: 2097152,
+	    },
+	  }
+	});
+});
+</script>
+{% endblock %}
+<!-- custom js end-->

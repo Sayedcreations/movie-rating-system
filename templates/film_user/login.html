@@ -1,0 +1,94 @@
+{% extends 'layout.html' %}
+{% block title %}
+Login
+{% endblock %}
+{% load static %}
+<!-- custom css -->
+{% block css %}
+{% endblock %}
+<!-- custom css end-->
+{% block content %}
+<div class="hero user-hero">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="hero-ct">
+					<h1>Login</h1>
+					<ul class="breadcumb">
+						<li class="active"><a href="#">Home</a></li>
+						<li> <span class="ion-ios-arrow-right"></span>Login</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="page-single">
+	<div class="container">
+		<div class="row ipad-width">
+				<div class="col-md-10 col-sm-12 col-xs-12 col-md-offset-1">
+				<div class="form-style-1 user-pro" action="">
+					<form action="" class="password"  id="myform" method="post">
+						{% csrf_token %}
+						{% if messages %}
+						<ul class="messages text-center">
+						{% for message in messages %}
+						 <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+						 {% endfor %}
+						 </ul>
+						 {% endif %}
+						<h4>login here</h4>
+						<div class="row">
+							<div class="col-md-6 form-it">
+								<label>Mobile Number</label>
+								<input type="text" placeholder="Mobile Number" name="mobile_number">
+							</div>
+
+							<div class="col-md-6 form-it">
+								<label>Password</label>
+								<input type="password" placeholder="Password" name="password">
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<p><a href="{% url 'film_user:signup' %}" class="custom-link-1 pull-right">Not registered signin here </a></p>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-2">
+								<input class="submit" type="submit" value="Submit">
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+<!-- custom js -->
+{% block js %}
+<script src="{% static 'validate/jquery.validate.min.js' %}"></script>
+<script src="{% static 'validate/additional-methods.min.js' %}"></script>
+<script>
+$(document).ready(function(){
+$( "#myform" ).validate({
+ ignore: [],
+  rules: {
+    mobile_number: {
+      required: true,
+      digits: true,
+      minlength: 9,
+      maxlength: 10,
+    },
+    password: {
+      required: true,
+      minlength: 5,
+      maxlength: 20,
+    },
+  }
+});
+});
+</script>
+{% endblock %}
+<!-- custom js end-->

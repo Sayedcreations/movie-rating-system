@@ -1,0 +1,106 @@
+{% extends 'layout.html' %}
+{% block title %}
+List Pro
+{% endblock %}
+{% load static %}
+<!-- custom css -->
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'datatables/datatables.css' %}"/>
+{% endblock %}
+<!-- custom css end-->
+{% block content %}
+<div class="hero user-hero">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="hero-ct">
+					<h1>pro - list</h1>
+					<ul class="breadcumb">
+						<li class="active"><a href="#">Home</a></li>
+						<li> <span class="ion-ios-arrow-right"></span>Pro</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="page-single" style="background-color: white;">
+	<div class="container">
+		<div class="row ipad-width2">
+			<div class="col-md-12 col-sm-12 col-xs-12" >
+				{% if messages %}
+				<ul class="messages text-center">
+				{% for message in messages %}
+				 <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+				 {% endfor %}
+				 </ul>
+				 {% endif %}
+{% if data_list|length > 0 %}
+<table id="myTable"  style="width:100%">
+				<thead>
+						<tr>
+								<th width="10">#</th>
+								<th>Full Name</th>
+								<th>Email</th>
+								<th>Phone</th>
+								<th>State</th>
+								<th>Date Added</th>
+								<th>Status</th>
+						</tr>
+				</thead>
+				<tbody>
+{% for row in data_list %}
+						<tr>
+								<td> {{ forloop.counter }} </td>
+								<td>{{ row.firstname }} {{ row.lastname }}</td>
+								<td>{{ row.email }}</td>
+								<td>{{ row.phone }}</td>
+								<td>{{ row.state }}</td>
+								<td>{{ row.date_added }}</td>
+								<td>
+									{% if row.status == 'active'  %}
+							<div class="cate">
+	    					<span class="green"><a href="#" tabindex="0">Active</a></span>
+	    				</div>
+                 <a href="change-pro-status/{{ row.unique_id }}/{{ row.status }}" role="button" style="background-color: #A6BB16; color: #ffffff; padding: 11px 11px; text-transform: uppercase;">Change Status</a>
+                 {% else %}
+								 <div class="cate">
+								  <span class="orange"><a href="#" tabindex="0">Pending</a></span>
+									</div>
+								 <a href="change-pro-status/{{ row.unique_id }}/{{ row.status }}" role="button" style="background-color: #ec5a1a; color: #ffffff; padding: 11px 11px; text-transform: uppercase;">Change Status</a>
+								 {% endif %}
+								</td>
+						</tr>
+{% endfor %}
+</tbody>
+<tfoot>
+	<tr>
+		<th width="10">#</th>
+		<th>Full Name</th>
+		<th>Email</th>
+		<th>Phone</th>
+		<th>State</th>
+		<th>Date Added</th>
+		<th>Status</th>
+	</tr>
+</tfoot>
+</table>
+{% else %}
+<span class="error">No pro added yet.</span>
+{% endif %}
+
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+<!-- custom js -->
+{% block js %}
+<script type="text/javascript" src="{% static 'datatables/datatables.js' %}"></script>
+<script>
+$(document).ready( function () {
+    $('#myTable').DataTable();
+} );
+</script>
+{% endblock %}
+<!-- custom js end-->

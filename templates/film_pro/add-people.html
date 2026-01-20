@@ -1,0 +1,176 @@
+{% extends 'layout.html' %}
+{% block title %}
+Edit Profile
+{% endblock %}
+{% load static %}
+<!-- custom css -->
+{% block css %}
+{% endblock %}
+<!-- custom css end-->
+{% block content %}
+<div class="hero user-hero">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="hero-ct">
+					<h1>Add People</h1>
+					<ul class="breadcumb">
+						<li class="active"><a href="#">Home</a></li>
+						<li> <span class="ion-ios-arrow-right"></span>Profile</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="page-single">
+	<div class="container">
+		<div class="row ipad-width">
+			<div class="col-md-10 col-sm-12 col-xs-12 col-md-offset-1">
+				<div class="form-style-1 user-pro" action="#">
+					<form action="" class="user" id="profile_form" method="post" enctype="multipart/form-data" >
+						{% csrf_token %}
+						{% if messages %}
+						<ul class="messages text-center">
+						{% for message in messages %}
+						 <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+						 {% endfor %}
+						 </ul>
+						 {% endif %}
+						<h4>01. Details</h4>
+						<div class="row">
+							<div class="col-md-6 form-it">
+								<label>First Name</label>
+								<input type="text" placeholder="First Name" value="" name="firstname" >
+							</div>
+							<div class="col-md-6 form-it">
+								<label>Last Name</label>
+								<input type="text" placeholder="Last Name" value="" name="lastname" >
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-6 form-it">
+								<label>Date of Birth</label>
+								<input type="date" placeholder="" value="" name="date_of_birth">
+							</div>
+							<div class="col-md-6 form-it">
+								<label>Country</label>
+								<select name="country">
+								<option value="">Select</option>
+                <option value="India">India</option>
+                <option value="United Kingdom">United Kingdom</option>
+								<option value="Usa">Usa</option>
+                <option value="Australia">Australia</option>
+                <option value="Srilanka">Srilanka</option>
+								<option value="German">German</option>
+             		<option value="France">France</option>
+							  <option value="Brazil">Brazil</option>
+								<option value="Russia">Russia</option>
+								</select>
+							</div>
+						</div>
+						<div class="row">
+						<div class="col-md-12 form-it">
+						<label>Photo</label>
+						<<input type="file" name="celeb_photo" value="" style="width: -webkit-fill-available; height: auto;">
+						</div>
+						</div>
+						<div class="row">
+						<div class="col-md-12 form-it">
+						<label>Biography</label>
+            <textarea name="biography"></textarea>
+						</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6 form-it">
+								<label>Cast / Crew</label>
+								<select name="cast_crew">
+								<option value="">Select</option>
+								<option value="cast">Cast</option>
+								<option value="crew">Crew</option>
+								</select>
+							</div>
+							<div class="col-md-6 form-it">
+								<label>Postion</label>
+								<select name="position" multiple style="height: 130px">
+								<option value="actor">Actor</option>
+								<option value="actress">Actress</option>
+								<option value="director">Director</option>
+								<option value="producer">Producer</option>
+								<option value="music">Music</option>
+								<option value="editor">Editor</option>
+								<option value="art">Art</option>
+								<option value="costume">Costume</option>
+								<option value="makeup">Makeup</option>
+								<option value="special_effects">Special Effects</option>
+								<option value="visual_effects">Visual Effects</option>
+								<option value="stunt">Stunt</option>
+								<option value="location">Location</option>
+								<option value="script">Script</option>
+								<option value="screen_play">Screen Play</option>
+								<option value="story">Story</option>
+								<option value="others">Others</option>
+								</select>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-2">
+								<input class="submit" type="submit" value="save">
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+<!-- custom js -->
+{% block js %}
+<script src="{% static 'validate/jquery.validate.min.js' %}"></script>
+<script src="{% static 'validate/additional-methods.min.js' %}"></script>
+<script>
+$(document).ready(function(){
+$( "#profile_form" ).validate({
+ ignore: [],
+  rules: {
+     firstname: {
+      required: true,
+      digits: false,
+      minlength: 2,
+      maxlength: 255
+    },
+    lastname: {
+      required: true,
+      digits: false,
+      minlength: 2,
+      maxlength: 255
+    },
+    date_of_birth: {
+      required: true,
+    },
+		biography: {
+      required: true,
+      digits: false,
+      minlength: 100,
+      maxlength: 20000
+    },
+		position: {
+			required: true,
+		},
+		cast_crew: {
+			required: true,
+		},
+		country: {
+     required: true,
+		},
+    celeb_photo: {
+			extension:'png,jpg,jpeg',
+		}
+  }
+});
+});
+</script>
+{% endblock %}
+<!-- custom js end-->

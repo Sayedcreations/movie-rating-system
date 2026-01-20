@@ -1,0 +1,116 @@
+{% extends 'layout.html' %}
+{% block title %}
+Edit Profile
+{% endblock %}
+{% load static %}
+<!-- custom css -->
+{% block css %}
+{% endblock %}
+<!-- custom css end-->
+{% block content %}
+<div class="hero common-hero">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="hero-ct">
+					<h1> movie listing - list</h1>
+					<ul class="breadcumb">
+						<li class="active"><a href="#">Home</a></li>
+						<li> <span class="ion-ios-arrow-right"></span> movie listing</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="page-single movie_list">
+	<div class="container">
+		<div class="row ipad-width2">
+			<div class="col-md-8 col-sm-12 col-xs-12">
+				<div class="topbar-filter">
+					<p>Found <span>{{ data_list|length }} movies</span> in total</p>
+					<a href="" class="list"><i class="ion-ios-list-outline active"></i></a>
+				</div>
+
+				{% for row in data_list %}
+				<div class="movie-item-style-2">
+					<img src="{{ row.photo }}" alt="" style="width: 170px !important;" >
+					<div class="mv-item-infor">
+						<h6><a href="{% url 'film_pro:view_movie' id=row.unique_id %}">{{ row.title }} <span>({{ row.release_date|date:'Y' }})</span></a></h6>
+
+            {% for row1 in rating %}
+						{% if row1.movie_id == row.unique_id %}
+            <p class="rate"><i class="ion-android-star"></i><span>{{ row1.rating_value }}</span> /10</p>
+						{% endif %}
+            {% empty %}
+						<p class="rate"><i class="ion-android-star"></i><span>0</span> /10</p>
+            {% endfor %}
+						<p class="describe">{{ row.overview|slice:"0:150" }}...</p>
+						<p class="run-time"> Run Time: {{ row.running_time }} min    .     <span>{{ row.certificate }} </span>    .     <span>Release: {{ row.release_date|date:"d M Y" }}</span></p>
+						<!--
+						<p>Director: <a href="#">Joss Whedon</a></p>
+						<p>Stars: <a href="#">Robert Downey Jr.,</a> <a href="#">Chris Evans,</a> <a href="#">  Chris Hemsworth</a></p>
+
+
+						<a href="{% url 'film_pro:view_movie' id=row.unique_id %}" role="button" class="redbtn pull-right" style="padding: 7px 25px;" >view</a>
+            -->
+					</div>
+				</div>
+				{% empty %}
+          <span class="error">No movies added yet</span>
+        {% endfor %}
+			</div>
+			<div class="col-md-4 col-sm-12 col-xs-12">
+				<div class="sidebar">
+					<div class="searh-form">
+						<h4 class="sb-title">Search for movie</h4>
+						<form class="form-style-1" action="" method="POST">
+								{% csrf_token %}
+							<div class="row">
+								<div class="col-md-12 form-it">
+									<label>Movie name</label>
+									<input type="text" placeholder="Enter keywords" name="movie_name">
+								</div>
+								<div class="col-md-12 form-it">
+									<label>Genres</label>
+									<div class="group-ip">
+										<select name="genre" multiple="" class="ui fluid dropdown">
+											  <option value="">Enter to filter genres</option>
+											  <option value="Action">Action</option>
+												<option value="Animation">Animation</option>
+												<option value="Adventure">Adventure</option>
+												<option value="Comedy">Comedy</option>
+												<option value="Crime">Crime</option>
+												<option value="Drama">Drama</option>
+												<option value="Fantasy">Fantasy</option>
+												<option value="Historical">Historical</option>
+												<option value="Horror">Horror</option>
+												<option value="Romance">Romance</option>
+												<option value="Thriller">Thriller</option>
+												<option value="Western">Western</option>
+												<option value="Other">Other</option>
+										</select>
+									</div>
+
+								</div>
+
+								<div class="col-md-12 ">
+									<input class="submit" type="submit" value="submit">
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="ads">
+						<img src="images/uploads/ads1.png" alt="">
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+<!-- custom js -->
+{% block js %}
+{% endblock %}
+<!-- custom js end-->

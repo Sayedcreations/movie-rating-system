@@ -1,0 +1,60 @@
+{% extends 'layout.html' %}
+{% block title %}
+Dashboard
+{% endblock %}
+{% load static %}
+<!-- custom css -->
+{% block css %}
+{% endblock %}
+<!-- custom css end-->
+{% block content %}
+<div class="hero user-hero">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="hero-ct">
+					<h1>{{ userdata.firstname }} {{ userdata.lastname }} profile</h1>
+					<ul class="breadcumb">
+						<li class="active"><a href="#">Home</a></li>
+						<li> <span class="ion-ios-arrow-right"></span>Profile</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="page-single">
+	<div class="container">
+		<div class="row ipad-width">
+			<div class="col-md-3 col-sm-12 col-xs-12">
+				<div class="user-information">
+					<div class="user-img" style="margin-bottom: 0px;" >
+           {% if userdata.profile_photo != '' %}
+						<a href=""><img src="{{ userdata.profile_photo }}" alt=""><br></a>
+           {% else %}
+					 <a href=""><img src="{% static 'images/uploads/user-img.png' %}" alt=""><br></a>
+					 {% endif %}
+						<ul><li class="active"><a href="javascript:;"> ( USER ) </a></li></ul>
+					</div>
+					<div class="user-fav">
+						<p>Account Details</p>
+						<ul>
+							<li class="active"><a href="javascript:;"><img src="{% static 'icons/accessibility-outline.svg' %}" width="15" />  {{ userdata.firstname }} {{ userdata.lastname }}</a></li>
+							<li class="active"><a href="javascript:;"><img src="{% static 'icons/call-outline.svg' %}" width="15" /> {{ userdata.phone }}</a></li>
+							<li class="active"><a href="javascript:;"><img src="{% static 'icons/mail-outline.svg' %}" width="15" /> {{ userdata.email }}</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-9 col-sm-12 col-xs-12">
+				<div class="form-style-1 user-pro" action="#">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+<!-- custom js -->
+{% block js %}
+{% endblock %}
+<!-- custom js end-->
